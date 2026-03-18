@@ -83,10 +83,10 @@ response = requests.post(
 | Structured Logging | JSON-логи с контекстом для анализа |
 
 🏗️ Архитектура
-┌─────────────┐     ┌─────────────────┐     ┌─────────────┐
+          
 │  Ваше       │     │  Ghost Proxy    │     │  LLM API    │
 │  Приложение │────▶│  (Local)        │────▶│  (Cloud)    │
-└─────────────┘     │                 │     └─────────────┘
+                    |                 |
                     │ • PII Redaction │
                     │ • Encryption    │
                     │ • Audit Log     │
