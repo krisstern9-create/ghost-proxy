@@ -84,7 +84,7 @@ response = requests.post(
 
 🏗️ Архитектура
           
-│ Ваше Приложение │ Ghost Proxy │ LLM API │
+| Ваше приложение | Ghost Proxy | LLM API |
 |-----------------|-------------|---------|
 │ Пример | (Local)   │ (Cloud) |
 | Пример | • PII Redaction | Пример|
