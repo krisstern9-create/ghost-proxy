@@ -1,0 +1,68 @@
+# ============================================
+# GHOST PROXY - PRODUCTION DEPENDENCIES
+# ============================================
+
+# --- Web Framework ---
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+pydantic==2.8.0
+pydantic-settings==2.4.0
+
+# --- HTTP Client (Proxy Core) ---
+httpx==0.27.0
+aiohttp==3.9.5
+
+# --- Privacy & PII Detection ---
+presidio-analyzer==2.2.353
+presidio-anonymizer==2.2.353
+spacy==3.7.5
+en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.1/en_core_web_lg-3.7.1-py3-none-any.whl
+
+# --- Encryption & Security ---
+cryptography==43.0.0
+pycryptodome==3.20.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+secrets-token==1.0.2
+
+# --- Database (Audit Logs) ---
+sqlalchemy==2.0.31
+alembic==1.13.2
+aiosqlite==0.20.0
+asyncpg==0.29.0
+
+# --- Cache & Rate Limiting ---
+redis==5.0.7
+aioredis==2.0.1
+slowapi==0.1.9
+
+# --- Monitoring & Observability ---
+prometheus-client==0.20.0
+prometheus-fastapi-instrumentator==7.0.0
+opentelemetry-api==1.25.0
+opentelemetry-sdk==1.25.0
+opentelemetry-instrumentation-fastapi==0.46b0
+
+# --- Testing ---
+pytest==8.3.2
+pytest-asyncio==0.23.8
+pytest-cov==5.0.0
+pytest-mock==3.14.0
+httpx==0.27.0
+
+# --- Code Quality ---
+black==24.4.2
+flake8==7.1.0
+mypy==1.11.0
+isort==5.13.2
+pre-commit==3.7.1
+
+# --- Utilities ---
+python-dotenv==1.0.1
+loguru==0.7.2
+orjson==3.10.6
+tenacity==8.5.0
+
+# --- Docker ---
+docker==7.1.0

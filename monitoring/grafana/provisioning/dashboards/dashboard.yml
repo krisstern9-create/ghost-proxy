@@ -1,0 +1,17 @@
+# ============================================
+# GRAFANA DASHBOARD PROVISIONING
+# ============================================
+
+apiVersion: 1
+
+providers:
+  - name: 'Ghost Proxy Dashboards'
+    orgId: 1
+    folder: 'Ghost Proxy'
+    folderUid: 'ghost-proxy'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

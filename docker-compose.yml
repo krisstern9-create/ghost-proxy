@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # GHOST PROXY APPLICATION
+  # ============================================
+  ghost-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ghost-proxy-app
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - PRIVACY_MODE=${PRIVACY_MODE:-strict}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_ENCRYPTION_KEY=${LOG_ENCRYPTION_KEY}
+      - DATABASE_URL=postgresql+asyncpg://ghostproxy:securepassword@db:5432/ghostproxy
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./logs:/app/logs
+      - ./encrypted_logs:/app/encrypted_logs
+    networks:
+      - ghost-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================
+  # POSTGRESQL (Audit Logs)
+  # ============================================
+  db:
+    image: postgres:15-alpine
+    container_name: ghost-proxy-db
+    environment:
+      POSTGRES_USER: ghostproxy
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: ghostproxy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ghost-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ghostproxy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # REDIS (Cache & Rate Limiting)
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: ghost-proxy-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - ghost-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # PROMETHEUS (Monitoring)
+  # ============================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ghost-proxy-prometheus
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - "9090:9090"
+    networks:
+      - ghost-network
+    restart: unless-stopped
+
+  # ============================================
+  # GRAFANA (Visualization)
+  # ============================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ghost-proxy-grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=securepassword
+    ports:
+      - "3000:3000"
+    networks:
+      - ghost-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+networks:
+  ghost-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
