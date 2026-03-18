@@ -56,6 +56,7 @@ response = requests.post(
     },
     headers={"Authorization": "Bearer your-local-token"}
 )
+```
 
 ⚙️ Возможности
 🔒 Приватность
@@ -144,11 +145,6 @@ Fork репозиторий
 Закоммить изменения (git commit -m 'Add amazing feature')
 Запушь (git push origin feature/amazing-feature)
 Открой Pull Request
-
-Пожалуйста:
-- Пиши тесты для нового функционала
-- Следуй PEP 8 и типизации
-- Обновляй документацию
 
 📜 Лицензия
 MIT License. См. LICENSE для деталей.
