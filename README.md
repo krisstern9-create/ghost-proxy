@@ -138,13 +138,6 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 # Линтинг
 black . && flake8 . && mypy app/
 
-🤝 Contributing
-Fork репозиторий
-Создай ветку (git checkout -b feature/amazing-feature)
-Закоммить изменения (git commit -m 'Add amazing feature')
-Запушь (git push origin feature/amazing-feature)
-Открой Pull Request
-
 📜 Лицензия
 MIT License. См. LICENSE для деталей.
 
