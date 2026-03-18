@@ -84,14 +84,13 @@ response = requests.post(
 
 🏗️ Архитектура
           
-│  Ваше       │     │  Ghost Proxy    │     │  LLM API    │
-│  Приложение │────▶│  (Local)        │────▶│  (Cloud)    │
-                    |                 |
-                    │ • PII Redaction │
-                    │ • Encryption    │
-                    │ • Audit Log     │
-                    │ • Rate Limit    │
-                    └─────────────────┘
+│ Ваше Приложение │ Ghost Proxy │ LLM API │
+|-----------------|-------------|---------|
+│ ----------------|   (Local)   │ (Cloud) |
+|-----------------| • PII Redaction | ------|
+|-----------------| • Encryption │----------|
+|-----------------| • Audit Log |---------|
+|-----------------| • Rate Limit |---------|
 
 Компоненты:
 - FastAPI — асинхронный веб-фреймворк
